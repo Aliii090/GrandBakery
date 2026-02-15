@@ -25,29 +25,39 @@ video{
   z-index:-1;
 }
 
-/* TOP BAR */
+/* TOP BAR FIXED & SMALLER */
 .top-bar{
   position:fixed;
   top:0;
   left:0;
   width:100%;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.85);
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px 20px;
+  padding:5px 15px;       /* reduced padding for smaller height */
+  max-width:1200px;
+  margin:0 auto;
+  box-sizing:border-box;
   z-index:1000;
+  height:50px;            /* set explicit height */
 }
-.top-bar img{
-  height:50px;
+
+.top-bar img.logo-bar{
+  width:45px;            /* smaller logo to match */
+  height:auto;
 }
-.lang-toggle{
+
+.top-bar button.lang-toggle{
   background:#D4AF37;
   border:none;
-  padding:6px 12px;
+  padding:5px 10px;       /* smaller button */
   border-radius:8px;
   cursor:pointer;
+  font-weight:bold;
+  font-size:0.9rem;       /* slightly smaller text */
 }
+
 
 /* TOP MENU CARDS */
 .top-menu-container{
