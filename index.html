@@ -29,7 +29,7 @@ video{
   filter:blur(6px) brightness(40%);
   z-index:-1;
 }
-/* TOP BAR FIXED */
+/* TOP BAR FIXED & SMALLER */
 .top-bar{
   position:fixed;
   top:0;
@@ -39,23 +39,27 @@ video{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px 20px;
-  max-width:1200px;       /* keeps it from expanding too much */
-  margin:0 auto;           /* centers content */
+  padding:5px 15px;       /* reduced padding for smaller height */
+  max-width:1200px;
+  margin:0 auto;
   box-sizing:border-box;
   z-index:1000;
+  height:50px;            /* set explicit height */
 }
+
 .top-bar img.logo-bar{
-  width:120px;
+  width:100px;            /* smaller logo to match */
   height:auto;
 }
+
 .top-bar button.lang-toggle{
   background:#D4AF37;
   border:none;
-  padding:8px 15px;
+  padding:5px 10px;       /* smaller button */
   border-radius:8px;
   cursor:pointer;
   font-weight:bold;
+  font-size:0.9rem;       /* slightly smaller text */
 }
 
 /* INSTALL BANNER */
