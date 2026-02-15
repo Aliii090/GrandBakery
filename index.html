@@ -4,12 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grand Bakery</title>
-
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1C1C1C">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 body{
   margin:0;
@@ -29,105 +24,76 @@ video{
   filter:blur(6px) brightness(40%);
   z-index:-1;
 }
-/* TOP BAR FIXED & SMALLER */
+
+/* TOP BAR */
 .top-bar{
   position:fixed;
   top:0;
   left:0;
   width:100%;
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.7);
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:5px 15px;       /* reduced padding for smaller height */
-  max-width:1200px;
-  margin:0 auto;
-  box-sizing:border-box;
+  padding:10px 20px;
   z-index:1000;
-  height:50px;            /* set explicit height */
 }
-
-.top-bar img.logo-bar{
-  width:40px;            /* smaller logo to match */
-  height:auto;
+.top-bar img{
+  height:50px;
 }
-
-.top-bar button.lang-toggle{
+.lang-toggle{
   background:#D4AF37;
-  border:none;
-  padding:5px 10px;       /* smaller button */
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-  font-size:0.9rem;       /* slightly smaller text */
-}
-
-/* INSTALL BANNER */
-#install-banner{
-  position:fixed;
-  top:60px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#D4AF37;
-  padding:12px 25px;
-  border-radius:12px;
-  z-index:1001;
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-#install-banner button{
-  background:black;
-  color:white;
   border:none;
   padding:6px 12px;
   border-radius:8px;
   cursor:pointer;
-  font-weight:bold;
 }
 
-/* HEADER */
-.header{
-  text-align:center;
-  padding:100px 20px 40px;
-}
-.header h1{
-  margin-top:15px;
+/* TOP MENU CARDS */
+.top-menu-container{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin:100px 20px 30px 20px; /* space below top-bar */
 }
 
-/* TOP-LEVEL MENU CARDS */
-.menu-card{
-  background:rgba(0,0,0,0.6);
-  margin:30px auto;
-  padding:20px;
+.top-menu-card{
+  width:300px;
+  height:180px;
   border-radius:20px;
-  cursor:pointer;
-  max-width:400px;
-  text-align:center;
-  transition:0.4s;
-}
-.menu-card:hover{
-  transform:scale(1.03);
-  box-shadow:0 0 20px rgba(212,175,55,0.4);
-}
-.menu-card img{
-  width:100%;
-  border-radius:20px;
-}
-.menu-card h2{
-  margin-top:10px;
-}
-
-/* SUB-MENU ITEMS */
-.menu-items{
-  max-height:0;
   overflow:hidden;
-  transition:max-height .6s ease;
-  margin-top:20px;
+  cursor:pointer;
+  text-align:center;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background:rgba(0,0,0,0.6);
+  padding:10px;
 }
-.menu-card.active .menu-items{
-  max-height:3000px;
+
+.top-menu-card img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:15px;
 }
+
+.top-menu-card h2{
+  margin-top:8px;
+  font-size:1.3rem;
+  color:white;
+}
+
+/* SUBMENUS */
+.submenu{
+  display:none;
+  margin:20px;
+  padding:20px;
+  background:rgba(0,0,0,0.6);
+  border-radius:20px;
+}
+
 .menu-items li{
   list-style:none;
   margin:15px 0;
@@ -135,10 +101,12 @@ video{
   align-items:center;
   gap:12px;
 }
-.menu-items li img.thumb{
-  width:60px;
-  cursor:pointer;
+
+/* THUMBNAILS */
+.thumb{
+  max-width:60px;
   border-radius:10px;
+  cursor:pointer;
   transition:.3s;
 }
 
@@ -170,10 +138,6 @@ video{
   text-align:center;
   padding:40px 20px;
 }
-.contact a{
-  color:white;
-  text-decoration:none;
-}
 .icons{
   display:flex;
   justify-content:center;
@@ -185,29 +149,49 @@ video{
   border-radius:12px;
   cursor:pointer;
 }
+
+/* INSTALL NOTIFICATION */
+#install-notif{
+  position:fixed;
+  top:70px;
+  right:0;
+  background:rgba(212,175,55,0.9);
+  color:black;
+  padding:20px 15px;
+  border-radius:10px 0 0 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  z-index:2000;
+  font-weight:bold;
+}
+#install-notif button{
+  background:black;
+  color:white;
+  border:none;
+  padding:5px 10px;
+  cursor:pointer;
+  border-radius:6px;
+}
 </style>
 </head>
 <body>
 
 <video autoplay muted loop playsinline>
-  <source src="grandvideo.mp4" type="video/mp4">
+<source src="grandvideo.mp4" type="video/mp4">
 </video>
 
 <!-- TOP BAR -->
 <div class="top-bar">
-  <img src="logogrand.png" class="logo-bar">
+  <img src="logogrand.png" alt="Grand Bakery">
   <button class="lang-toggle" onclick="toggleLang()">EN</button>
 </div>
 
-<!-- INSTALL BANNER -->
-<div id="install-banner">
-  <span>Install Grand Bakery on your home screen</span>
-  <button onclick="closeBanner()">Close</button>
-</div>
-
-<!-- HEADER -->
-<div class="header">
-  <h1 id="title">Grand Bakery</h1>
+<!-- INSTALL NOTIF -->
+<div id="install-notif">
+  اضغط لتثبيت الموقع على الشاشة الرئيسية
+  <button onclick="document.getElementById('install-notif').style.display='none'">اغلاق</button>
 </div>
 
 <!-- TOP MENU CARDS -->
@@ -308,79 +292,41 @@ video{
   </ul>
 </div>
 
-<!-- CONTACT -->
-<div class="contact">
-<h2>تواصل معنا</h2>
-<p>
-<a href="tel:0797475002">0797475002</a> — 
-<a href="tel:0792089999">0792089999</a>
-</p>
-<div class="icons">
-<a href="https://maps.app.goo.gl/yTbwD8B4yRZAvzWd9" target="_blank">
-<img src="googlemapsembed.jpg">
-</a>
-<a href="https://www.instagram.com/grandbakeryjo" target="_blank">
-<img src="Instagram.jpg">
-</a>
-</div>
-</div>
-
 <!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeImg()">
   <img id="lightbox-img">
 </div>
 
 <script>
-/* MENU EXPAND */
-function toggleMenu(card){
-  card.classList.toggle("active");
+function toggleSubmenu(id){
+  const submenu = document.getElementById(id);
+  const allSubmenus = document.querySelectorAll('.submenu');
+  allSubmenus.forEach(s => {
+    if(s !== submenu) s.style.display = 'none';
+  });
+  submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
 }
 
-/* THUMBNAIL EXPAND/RETRACT */
-function toggleThumb(e,img){
-  e.stopPropagation();
-  const lightbox=document.getElementById("lightbox");
-  const lbimg=document.getElementById("lightbox-img");
-  if(lightbox.style.display==="flex"){
-    lightbox.style.display="none";
-  }else{
-    lbimg.src=img.src;
-    lightbox.style.display="flex";
-  }
+function openImg(event,img){
+  event.stopPropagation();
+  const lb=document.getElementById("lightbox");
+  lb.style.display="flex";
+  document.getElementById("lightbox-img").src=img.src;
 }
-
-/* CLOSE LIGHTBOX */
 function closeImg(){
   document.getElementById("lightbox").style.display="none";
 }
 
-/* LANGUAGE TOGGLE */
 function toggleLang(){
   const btn=document.querySelector(".lang-toggle");
   if(btn.innerText==="EN"){
     document.documentElement.lang="en";
     btn.innerText="AR";
-    document.getElementById("title").innerText="Grand Bakery Menu";
-  }else{
+  } else {
     document.documentElement.lang="ar";
     btn.innerText="EN";
-    document.getElementById("title").innerText="Grand Bakery";
   }
 }
-
-/* INSTALL BANNER */
-let deferredPrompt;
-window.addEventListener("beforeinstallprompt", e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  setTimeout(()=>{
-    document.getElementById("install-banner").style.display="flex";
-  },1000);
-});
-function closeBanner(){
-  document.getElementById("install-banner").style.display="none";
-}
 </script>
-
 </body>
 </html>
