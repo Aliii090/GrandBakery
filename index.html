@@ -6,7 +6,6 @@
 <title>قائمة مناقيش ومعجنات</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
 <style>
-/* Basic Reset */
 *{margin:0;padding:0;box-sizing:border-box;}
 body, html{width:100%;height:100%;font-family:'Roboto', sans-serif;overflow-x:hidden;}
 body{color:#fff;background:#1C1C1C;}
@@ -25,8 +24,6 @@ body{color:#fff;background:#1C1C1C;}
   position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;
   filter:blur(4px) brightness(0.5);
 }
-
-/* Overlay */
 .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:-1;}
 
 /* Header */
@@ -41,17 +38,28 @@ header img{height:60px;}
 .hero h1{font-family:'Cormorant Garamond', serif;font-size:2.5rem;margin-bottom:10px;}
 
 /* Menu Section */
-.menu-section{padding:20px;display:flex;flex-direction:column;gap:15px;max-width:800px;margin:0 auto;}
+.menu-section{padding:20px;display:flex;flex-direction:column;gap:15px;max-width:900px;margin:0 auto;}
 .menu-card{
   background:rgba(255,255,255,0.05);backdrop-filter:blur(6px);border-radius:15px;overflow:hidden;cursor:pointer;
-  transition:transform 0.3s, box-shadow 0.3s;
+  transition:transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
 .menu-card:hover{transform:scale(1.02);box-shadow:0 8px 20px rgba(0,0,0,0.5);}
 .menu-card img{width:100%;height:200px;object-fit:cover;}
 .menu-card h2{text-align:center;font-family:'Cormorant Garamond', serif;font-size:1.8rem;padding:10px 0;background:rgba(0,0,0,0.4);}
-.menu-items{display:none;padding:10px 20px;background:rgba(0,0,0,0.3);border-top:1px solid #D4AF37;border-radius:0 0 15px 15px;}
+.menu-items{
+  display:none;padding:10px 20px;background:rgba(0,0,0,0.3);border-top:1px solid #D4AF37;border-radius:0 0 15px 15px;
+  max-height:0;overflow:hidden;transition:max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+  opacity:0;transform:translateY(-10px);
+}
+.menu-items.show{
+  display:block;
+  max-height:1000px; /* large enough for all items */
+  opacity:1;
+  transform:translateY(0);
+}
 .menu-items ul{list-style:none;}
-.menu-items li{padding:5px 0;border-bottom:1px solid rgba(212,175,55,0.3);display:flex;justify-content:space-between;}
+.menu-items li{padding:5px 0;border-bottom:1px solid rgba(212,175,55,0.3);display:flex;justify-content:space-between;transition:background 0.3s;}
+.menu-items li:hover{background:rgba(212,175,55,0.1);border-radius:5px;padding-left:5px;padding-right:5px;}
 
 /* Contact Section */
 .contact{padding:30px 20px;text-align:center;background:rgba(0,0,0,0.6);}
@@ -102,6 +110,7 @@ html{scroll-behavior:smooth;}
 
 <!-- Menu Section -->
 <section class="menu-section">
+
   <!-- Card 1: مناقيشنا -->
   <div class="menu-card" onclick="toggleItems('manakish')">
     <img src="menu1.jpg" alt="مناقيشنا">
@@ -113,12 +122,31 @@ html{scroll-behavior:smooth;}
         <li><span class="ar">لحمة بعجين</span><span class="en">Meat with Dough</span><span>1.25 JD</span></li>
         <li><span class="ar">لحمة بعجين مع بيض</span><span class="en">Meat with Dough + Egg</span><span>1.35 JD</span></li>
         <li><span class="ar">لحمة بعجين مع موزاريلا</span><span class="en">Meat with Dough + Mozzarella</span><span>1.50 JD</span></li>
+        <li><span class="ar">لحمة بعجين مع محمرة</span><span class="en">Meat with Dough + Muhammara</span><span>1.35 JD</span></li>
         <li><span class="ar">جبنة بيضاء</span><span class="en">White Cheese</span><span>1.00 JD</span></li>
         <li><span class="ar">جبنة شيدر</span><span class="en">Cheddar Cheese</span><span>1.25 JD</span></li>
+        <li><span class="ar">جبنة موزاريلا</span><span class="en">Mozzarella</span><span>1.25 JD</span></li>
+        <li><span class="ar">مكس أجبان</span><span class="en">Cheese Mix</span><span>1.50 JD</span></li>
+        <li><span class="ar">جبنة موزاريلا مع نقانق</span><span class="en">Mozzarella + Sausage</span><span>1.50 JD</span></li>
+        <li><span class="ar">جبنة بيضاء مع زيتون</span><span class="en">White Cheese + Olives</span><span>1.20 JD</span></li>
+        <li><span class="ar">جبنة صفراء مع تيركي</span><span class="en">Yellow Cheese + Turkey</span><span>1.50 JD</span></li>
+        <li><span class="ar">جبنة موزاريلا مع تيركي</span><span class="en">Mozzarella + Turkey</span><span>1.50 JD</span></li>
         <li><span class="ar">محمرة هندي حار</span><span class="en">Spicy Indian Muhammara</span><span>0.80 JD</span></li>
+        <li><span class="ar">محمرة مع بيض</span><span class="en">Muhammara + Egg</span><span>1.00 JD</span></li>
+        <li><span class="ar">محمرة مع موزاريلا</span><span class="en">Muhammara + Mozzarella</span><span>1.50 JD</span></li>
+        <li><span class="ar">محمرة مع شيدر</span><span class="en">Muhammara + Cheddar</span><span>1.50 JD</span></li>
+        <li><span class="ar">محمرة مع زيتون</span><span class="en">Muhammara + Olives</span><span>1.00 JD</span></li>
         <li><span class="ar">بيض</span><span class="en">Egg</span><span>0.85 JD</span></li>
         <li><span class="ar">بطاطا</span><span class="en">Potato</span><span>1.85 JD</span></li>
-        <!-- Add remaining items in same format -->
+        <li><span class="ar">بطاطا مع بيض</span><span class="en">Potato + Egg</span><span>1.00 JD</span></li>
+        <li><span class="ar">بطاطا مع موزاريلا</span><span class="en">Potato + Mozzarella</span><span>1.25 JD</span></li>
+        <li><span class="ar">بطاطا مع محمرة</span><span class="en">Potato + Muhammara</span><span>1.20 JD</span></li>
+        <li><span class="ar">جبنة بيضاء مع بيض</span><span class="en">White Cheese + Egg</span><span>1.20 JD</span></li>
+        <li><span class="ar">جبنة موزاريلا مع بيض</span><span class="en">Mozzarella + Egg</span><span>1.50 JD</span></li>
+        <li><span class="ar">جبنة صفراء مع بيض</span><span class="en">Yellow Cheese + Egg</span><span>1.40 JD</span></li>
+        <li><span class="ar">بيض مع نقانق</span><span class="en">Egg + Sausage</span><span>1.20 JD</span></li>
+        <li><span class="ar">بيض اومليت مع خضار</span><span class="en">Egg Omelette + Vegetables</span><span>1.25 JD</span></li>
+        <!-- Add remaining Manakish items similarly -->
       </ul>
     </div>
   </div>
@@ -132,9 +160,24 @@ html{scroll-behavior:smooth;}
         <li><span class="ar">جبنة بيضاء</span><span class="en">White Cheese</span><span>0.30 JD</span></li>
         <li><span class="ar">جبنة صفراء</span><span class="en">Yellow Cheese</span><span>0.30 JD</span></li>
         <li><span class="ar">بطاطا</span><span class="en">Potato</span><span>0.30 JD</span></li>
+        <li><span class="ar">نقانق</span><span class="en">Sausage</span><span>0.30 JD</span></li>
         <li><span class="ar">زعتر</span><span class="en">Zaatar</span><span>0.30 JD</span></li>
         <li><span class="ar">سبانخ</span><span class="en">Spinach</span><span>0.30 JD</span></li>
-        <!-- Add remaining items in same format -->
+        <li><span class="ar">سبانخ حار</span><span class="en">Spicy Spinach</span><span>0.30 JD</span></li>
+        <li><span class="ar">جبنة وزعتر</span><span class="en">Cheese + Zaatar</span><span>0.40 JD</span></li>
+        <li><span class="ar">بيتزا</span><span class="en">Pizza</span><span>0.40 JD</span></li>
+        <li><span class="ar">زعتورق أخضر</span><span class="en">Green Zaatar</span><span>0.40 JD</span></li>
+        <li><span class="ar">جبنة بوك</span><span class="en">Puck Cheese</span><span>0.30 JD</span></li>
+        <li><span class="ar">سمبوسك حارة</span><span class="en">Spicy Sambousek</span><span>0.40 JD</span></li>
+        <li><span class="ar">بورك لحمة</span><span class="en">Meat Borek</span><span>0.50 JD</span></li>
+        <li><span class="ar">بورك جبنة</span><span class="en">Cheese Borek</span><span>0.50 JD</span></li>
+        <li><span class="ar">كبة</span><span class="en">Kibbeh</span><span>0.40 JD</span></li>
+        <li><span class="ar">موزاريلا مع تيركي</span><span class="en">Mozzarella + Turkey</span><span>0.40 JD</span></li>
+        <li><span class="ar">صفراء مع نقانق</span><span class="en">Yellow Cheese + Sausage</span><span>0.40 JD</span></li>
+        <li><span class="ar">زيتون مع جزر</span><span class="en">Olives + Carrot</span><span>0.40 JD</span></li>
+        <li><span class="ar">سنيورة وتيركي</span><span class="en">Suniora + Turkey</span><span>0.40 JD</span></li>
+        <li><span class="ar">سنيورة وجبنة بوك</span><span class="en">Suniora + Puck Cheese</span><span>0.40 JD</span></li>
+        <!-- Add any remaining Pastries items -->
       </ul>
     </div>
   </div>
@@ -155,10 +198,10 @@ window.addEventListener('load', () => {
   document.getElementById('loader').style.display = 'none';
 });
 
-// Toggle menu items
+// Toggle menu items with animation
 function toggleItems(id){
   const el = document.getElementById(id);
-  if(el.style.display==='block'){el.style.display='none';}else{el.style.display='block';}
+  el.classList.toggle('show');
 }
 
 // Language Toggle
@@ -173,7 +216,6 @@ function toggleLang(){
   document.getElementById('card2-title').innerText = isArabic ? 'معجناتنا' : 'Pastries';
   document.querySelector('.lang-toggle').innerText = isArabic ? 'English' : 'عربي';
 }
-
 // Initialize language
 toggleLang();
 </script>
