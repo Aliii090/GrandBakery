@@ -210,25 +210,24 @@ video{
   <h1 id="title">Grand Bakery</h1>
 </div>
 
-<!-- TOP-LEVEL MENU CARDS -->
-<div class="menu-card top-menu-card" onclick="toggleMenu(this)">
-  <img src="menu2.jpg" alt="مناقيش">
-  <h2>المناقيش</h2>
-</div>
-
-<div class="menu-card top-menu-card" onclick="toggleMenu(this)">
-  <img src="menu1.jpg" alt="معجنات">
-  <h2>المعجنات</h2>
-</div>
-
-<div class="menu-card top-menu-card" onclick="toggleMenu(this)">
-  <img src="healthy.jpg" alt="مناقيش صحية">
-  <h2>مناقيش صحية</h2>
+<!-- TOP MENU CARDS -->
+<div class="top-menu-container">
+  <div class="menu-card top-menu-card" onclick="toggleSubmenu('pastries-sub')">
+    <img src="menu1.jpg" alt="معجنات">
+    <h2>المعجنات</h2>
+  </div>
+  <div class="menu-card top-menu-card" onclick="toggleSubmenu('manakish-sub')">
+    <img src="menu2.jpg" alt="مناقيش">
+    <h2>المناقيش</h2>
+  </div>
+  <div class="menu-card top-menu-card" onclick="toggleSubmenu('healthy-sub')">
+    <img src="healthy.jpg" alt="مناقيش صحية">
+    <h2>مناقيش صحية</h2>
+  </div>
 </div>
 
 <!-- MANAKISH SUBMENU -->
-<div class="menu-card" onclick="toggleMenu(this)">
-  <h3>المناقيش</h3>
+<div class="menu-card submenu" id="manakish-sub">
   <ul class="menu-items">
     <li><img src="m1.jpg" class="thumb" onclick="openImg(event,this)">زعتر — 0.70 JD</li>
     <li><img src="m2.jpg" class="thumb" onclick="openImg(event,this)">زعتر مع جبنة بيضاء — 1.20 JD</li>
@@ -263,8 +262,7 @@ video{
 </div>
 
 <!-- PASTRIES SUBMENU -->
-<div class="menu-card" onclick="toggleMenu(this)">
-  <h3>المعجنات</h3>
+<div class="menu-card submenu" id="pastries-sub">
   <ul class="menu-items">
     <li><img src="b1.jpg" class="thumb" onclick="openImg(event,this)">جبنة بيضاء — 0.30 JD</li>
     <li><img src="b2.jpg" class="thumb" onclick="openImg(event,this)">جبنة صفراء — 0.30 JD</li>
@@ -290,8 +288,7 @@ video{
 </div>
 
 <!-- HEALTHY SUBMENU -->
-<div class="menu-card" onclick="toggleMenu(this)">
-  <h3>مناقيش صحية</h3>
+<div class="menu-card submenu" id="healthy-sub">
   <ul class="menu-items">
     <li><img src="h1.jpg" class="thumb" onclick="openImg(event,this)">مناقيش جبنة بيضاء — 1.200 JD</li>
     <li><img src="h2.jpg" class="thumb" onclick="openImg(event,this)">مناقيش زعتر — 0.900 JD</li>
