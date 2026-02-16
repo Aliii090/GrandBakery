@@ -7,138 +7,48 @@
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* BASE STYLES */
-body {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  color: white;
-  background: black;
-  direction: rtl;
-  overflow-x: hidden;
-}
+/* --- BASE STYLES --- */
+body { margin: 0; font-family: 'Cormorant Garamond', serif; color: white; background: black; direction: rtl; overflow-x: hidden; }
+video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(8px) brightness(35%); z-index: -1; }
 
-/* VIDEO BACKGROUND */
-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  filter: blur(8px) brightness(35%);
-  z-index: -1;
-}
-
-/* TOP BAR - GLASS EFFECT */
+/* --- TOP NAVIGATION --- */
 .top-bar {
-  position: fixed;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  max-width: 1200px;
-  width: 95%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  z-index: 1000;
-  border-radius: 0 0 20px 20px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%); max-width: 1200px; width: 95%;
+  background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; z-index: 1000;
+  border-radius: 0 0 20px 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.5);
 }
 .top-bar img { height: 50px; }
-.lang-toggle {
-  background: #D4AF37;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  color: black;
-}
+.lang-toggle { background: #D4AF37; border: none; padding: 8px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; color: black; }
 
-/* CATEGORY CARDS */
-.top-menu-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 120px 0 30px 0;
-  gap: 25px;
-}
+/* --- CATEGORY CARDS --- */
+.top-menu-container { display: flex; flex-direction: column; align-items: center; margin: 120px 0 30px 0; gap: 25px; }
 .top-menu-card {
-  width: 320px;
-  height: 200px;
-  border-radius: 25px;
-  overflow: hidden;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px;
-  transition: 0.3s;
+  width: 320px; height: 200px; border-radius: 25px; overflow: hidden; cursor: pointer;
+  background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3); display: flex; flex-direction: column; align-items: center; padding: 12px; transition: 0.3s;
 }
 .top-menu-card:hover { border-color: #D4AF37; background: rgba(0, 0, 0, 0.5); }
 .top-menu-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 18px; }
 .top-menu-card h2 { margin-top: 12px; font-size: 1.5rem; }
 
-/* SUBMENU - SEMI TRANSPARENT */
+/* --- SUBMENUS --- */
 .submenu {
-  display: none;
-  max-width: 650px;
-  width: 92%;
-  margin: 0 auto 40px auto;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: none; max-width: 650px; width: 92%; margin: 0 auto 40px auto; padding: 20px;
+  background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .menu-items { padding: 0; margin: 0; }
 .menu-items li {
-  list-style: none;
-  margin: 15px 0;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 10px;
-  font-size: 1.2rem;
+  list-style: none; margin: 15px 0; display: flex; align-items: center; gap: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px; font-size: 1.2rem;
 }
 .thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 12px; border: 1px solid #D4AF37; cursor: pointer; }
 
-/* LIGHTBOX */
-#lightbox {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.95);
-  display: none;
-  justify-content: center; align-items: center;
-  z-index: 9999;
-}
+/* --- POPUPS & NOTIFICATIONS --- */
+#lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 9999; }
 #lightbox img { max-width: 85%; max-height: 80%; border-radius: 20px; border: 2px solid #D4AF37; animation: zoom 0.3s; }
-
-/* INSTALL BANNER */
-#install-notif {
-  position: fixed;
-  bottom: 25px; left: 50%;
-  transform: translateX(-50%);
-  background: #D4AF37;
-  color: black;
-  padding: 18px;
-  border-radius: 20px;
-  display: none;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 2000;
-  width: 290px;
-  text-align: center;
-  font-weight: bold;
-}
+#install-notif { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: black; padding: 18px; border-radius: 20px; display: none; flex-direction: column; gap: 12px; z-index: 2000; width: 290px; text-align: center; font-weight: bold; }
 #install-notif button { background: black; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; }
 
 @keyframes zoom { from{transform:scale(.85); opacity:0;} to{transform:scale(1); opacity:1;} }
@@ -162,6 +72,10 @@ video {
     <img src="menu1.jpg">
     <h2 class="t-pastries">المعجنات</h2>
   </div>
+  <div class="top-menu-card" onclick="toggleSubmenu('pida-sub')">
+    <img src="pidamenu.jpg">
+    <h2 class="t-pida">بيدا</h2>
+  </div>
   <div class="top-menu-card" onclick="toggleSubmenu('healthy-sub')">
     <img src="healthy.jpg">
     <h2 class="t-healthy">مناقيش صحية</h2>
@@ -173,32 +87,9 @@ video {
     <li><img src="m1.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="زعتر" data-en="Thyme (Zaatar)">زعتر</span> — 0.70 JD</li>
     <li><img src="m2.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="زعتر مع جبنة بيضاء" data-en="Zaatar & White Cheese">زعتر مع جبنة بيضاء</span> — 1.20 JD</li>
     <li><img src="m3.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="لحمة بعجين" data-en="Meat Lahma Ba'jin">لحمة بعجين</span> — 1.25 JD</li>
-    <li><img src="m4.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="لحمة بعجين مع بيض" data-en="Meat with Egg">لحمة بعجين مع بيض</span> — 1.35 JD</li>
-    <li><img src="m5.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="لحمة بعجين مع موزاريلا" data-en="Meat with Mozzarella">لحمة بعجين مع موزاريلا</span> — 1.50 JD</li>
-    <li><img src="m6.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="لحمة بعجين مع محمرة" data-en="Meat with Muhammara">لحمة بعجين مع محمرة</span> — 1.35 JD</li>
     <li><img src="m7.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة بيضاء" data-en="White Cheese">جبنة بيضاء</span> — 1.00 JD</li>
     <li><img src="m8.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة شيدر" data-en="Cheddar Cheese">جبنة شيدر</span> — 1.25 JD</li>
     <li><img src="m9.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة موزاريلا" data-en="Mozzarella Cheese">جبنة موزاريلا</span> — 1.25 JD</li>
-    <li><img src="m10.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مكس أجبان" data-en="Mixed Cheese">مكس أجبان</span> — 1.50 JD</li>
-    <li><img src="m11.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة موزاريلا مع نقانق" data-en="Mozzarella with Sausage">جبنة موزاريلا مع نقانق</span> — 1.50 JD</li>
-    <li><img src="m12.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة بيضاء مع زيتون" data-en="White Cheese with Olives">جبنة بيضاء مع زيتون</span> — 1.20 JD</li>
-    <li><img src="m13.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة صفراء مع تيركي" data-en="Yellow Cheese & Turkey">جبنة صفراء مع تيركي</span> — 1.50 JD</li>
-    <li><img src="m14.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة موزاريلا مع تيركي" data-en="Mozzarella & Turkey">جبنة موزاريلا مع تيركي</span> — 1.50 JD</li>
-    <li><img src="m15.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="محمرة هندي حار" data-en="Spicy Indian Muhammara">محمرة هندي حار</span> — 0.80 JD</li>
-    <li><img src="m16.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="محمرة مع بيض" data-en="Muhammara with Egg">محمرة مع بيض</span> — 1.00 JD</li>
-    <li><img src="m17.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="محمرة مع موزاريلا" data-en="Muhammara & Mozzarella">محمرة مع موزاريلا</span> — 1.50 JD</li>
-    <li><img src="m18.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="محمرة مع شيدر" data-en="Muhammara & Cheddar">محمرة مع شيدر</span> — 1.50 JD</li>
-    <li><img src="m19.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="محمرة مع زيتون" data-en="Muhammara with Olives">محمرة مع زيتون</span> — 1.00 JD</li>
-    <li><img src="m20.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيض" data-en="Plain Egg">بيض</span> — 0.85 JD</li>
-    <li><img src="m21.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بطاطا" data-en="Potato">بطاطا</span> — 1.85 JD</li>
-    <li><img src="m22.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بطاطا مع بيض" data-en="Potato with Egg">بطاطا مع بيض</span> — 1.00 JD</li>
-    <li><img src="m23.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بطاطا مع موزاريلا" data-en="Potato & Mozzarella">بطاطا مع موزاريلا</span> — 1.25 JD</li>
-    <li><img src="m24.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بطاطا مع محمرة" data-en="Potato & Muhammara">بطاطا مع محمرة</span> — 1.20 JD</li>
-    <li><img src="m25.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة بيضاء مع بيض" data-en="White Cheese with Egg">جبنة بيضاء مع بيض</span> — 1.20 JD</li>
-    <li><img src="m26.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة موزاريلا مع بيض" data-en="Mozzarella with Egg">جبنة موزاريلا مع بيض</span> — 1.50 JD</li>
-    <li><img src="m27.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة صفراء مع بيض" data-en="Yellow Cheese with Egg">جبنة صفراء مع بيض</span> — 1.40 JD</li>
-    <li><img src="m28.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيض مع نقانق" data-en="Egg with Sausage">بيض مع نقانق</span> — 1.20 JD</li>
-    <li><img src="m29.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيض اومليت مع خضار" data-en="Veggie Omelet">بيض اومليت مع خضار</span> — 1.25 JD</li>
   </ul>
 </div>
 
@@ -206,24 +97,20 @@ video {
   <ul class="menu-items">
     <li><img src="b1.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة بيضاء" data-en="White Cheese">جبنة بيضاء</span> — 0.30 JD</li>
     <li><img src="b2.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة صفراء" data-en="Yellow Cheese">جبنة صفراء</span> — 0.30 JD</li>
-    <li><img src="b3.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بطاطا" data-en="Potato">بطاطا</span> — 0.30 JD</li>
-    <li><img src="b4.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="نقانق" data-en="Sausage">نقانق</span> — 0.30 JD</li>
-    <li><img src="b5.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="زعتر" data-en="Zaatar">زعتر</span> — 0.30 JD</li>
-    <li><img src="b6.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="سبانخ" data-en="Spinach">سبانخ</span> — 0.30 JD</li>
-    <li><img src="b7.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="سبانخ حار" data-en="Spicy Spinach">سبانخ حار</span> — 0.30 JD</li>
-    <li><img src="b8.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة وزعتر" data-en="Cheese & Zaatar">جبنة وزعتر</span> — 0.40 JD</li>
     <li><img src="b9.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيتزا" data-en="Mini Pizza">بيتزا</span> — 0.40 JD</li>
-    <li><img src="b10.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="زعتر ورق أخضر" data-en="Green Leaf Zaatar">زعتر ورق أخضر</span> — 0.40 JD</li>
-    <li><img src="b11.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="جبنة بوك" data-en="Puck Cheese">جبنة بوك</span> — 0.30 JD</li>
-    <li><img src="b12.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="سمبوسك حارة" data-en="Spicy Sambousek">سمبوسك حارة</span> — 0.40 JD</li>
-    <li><img src="b13.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بورك لحمة" data-en="Meat Borek">بورك لحمة</span> — 0.50 JD</li>
-    <li><img src="b14.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بورك جبنة" data-en="Cheese Borek">بورك جبنة</span> — 0.50 JD</li>
     <li><img src="b15.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="كبة" data-en="Kibbeh">كبة</span> — 0.40 JD</li>
-    <li><img src="b16.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="موزاريلا مع تيركي" data-en="Mozzarella & Turkey">موزاريلا مع تيركي</span> — 0.40 JD</li>
-    <li><img src="b17.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="صفراء مع نقانق" data-en="Cheese & Sausage">صفراء مع نقانق</span> — 0.40 JD</li>
-    <li><img src="b18.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="زيتون مع جزر" data-en="Olives & Carrots">زيتون مع جزر</span> — 0.40 JD</li>
-    <li><img src="b19.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="سنيورة وتيركي" data-en="Sanyoura & Turkey">سنيورة وتيركي</span> — 0.40 JD</li>
-    <li><img src="b20.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="سنيورة وجبنة بوك" data-en="Sanyoura & Puck">سنيورة وجبنة بوك</span> — 0.40 JD</li>
+  </ul>
+</div>
+
+<div class="submenu" id="pida-sub">
+  <ul class="menu-items">
+    <li><img src="P1.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا زنجر" data-en="Zinger Pida">بيدا زنجر</span></li>
+    <li><img src="P2.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا سوبريم" data-en="Supreme Pida">بيدا سوبريم</span></li>
+    <li><img src="P3.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا باباروني" data-en="Pepperoni Pida">بيدا باباروني</span></li>
+    <li><img src="P4.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا دجاج باربكيو" data-en="BBQ Chicken Pida">بيدا دجاج باربكيو</span></li>
+    <li><img src="P5.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا دجاج فاهيتا" data-en="Fajita Chicken Pida">بيدا دجاج فاهيتا</span></li>
+    <li><img src="P6.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا جبنة بيضاء مع سبانخ" data-en="White Cheese & Spinach Pida">بيدا جبنة بيضاء مع سبانخ</span></li>
+    <li><img src="P7.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="بيدا دجاج البافلو الحار" data-en="Spicy Buffalo Chicken Pida">بيدا دجاج البافلو الحار</span></li>
   </ul>
 </div>
 
@@ -231,19 +118,6 @@ video {
   <ul class="menu-items">
     <li><img src="h1.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش جبنة بيضاء" data-en="Healthy White Cheese">مناقيش جبنة بيضاء</span> — 1.20 JD</li>
     <li><img src="h2.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش زعتر" data-en="Healthy Zaatar">مناقيش زعتر</span> — 0.90 JD</li>
-    <li><img src="h3.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش بيض" data-en="Healthy Egg">مناقيش بيض</span> — 1.00 JD</li>
-    <li><img src="h4.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش جبنة مع زعتر" data-en="Cheese & Zaatar">مناقيش جبنة مع زعتر</span> — 1.40 JD</li>
-    <li><img src="h5.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش جبنة مع بيض" data-en="Cheese & Egg">مناقيش جبنة مع بيض</span> — 1.40 JD</li>
-    <li><img src="h6.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش محمرة" data-en="Healthy Muhammara">مناقيش محمرة</span> — 1.00 JD</li>
-    <li><img src="h7.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش محمرة مع موزاريلا" data-en="Muhammara & Mozzarella">مناقيش محمرة مع موزاريلا</span> — 1.70 JD</li>
-    <li><img src="h8.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش بيض مع نقانق" data-en="Egg & Sausage">مناقيش بيض مع نقانق</span> — 1.40 JD</li>
-    <li><img src="h9.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش جبنة صفراء" data-en="Healthy Yellow Cheese">مناقيش جبنة صفراء</span> — 1.40 JD</li>
-    <li><img src="h10.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش جبنة صفراء مع بيض" data-en="Cheese & Egg">مناقيش جبنة صفراء مع بيض</span> — 1.70 JD</li>
-    <li><img src="h11.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش مكس أجبان" data-en="Mixed Cheese">مناقيش مكس أجبان</span> — 1.70 JD</li>
-    <li><img src="h12.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش موزاريلا مع تيركي" data-en="Mozzarella & Turkey">مناقيش موزاريلا مع تيركي</span> — 1.70 JD</li>
-    <li><img src="h13.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش بيض مع سلامي" data-en="Egg & Salami">مناقيش بيض مع سلامي</span> — 1.75 JD</li>
-    <li><img src="h14.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="مناقيش محمرة مع بيض (شكشوكة)" data-en="Shakshuka Muhammara">مناقيش محمرة مع بيض (شكشوكة)</span> — 1.50 JD</li>
-    <li><img src="h15.jpg" class="thumb" onclick="openImg(event,this)"><span class="item-name" data-ar="معجنات قمح الحبة الكاملة" data-en="Whole Wheat Pastries">معجنات قمح الحبة الكاملة</span> — 0.50 JD</li>
   </ul>
 </div>
 
@@ -259,17 +133,11 @@ video {
     </p>
   </div>
 
-  <div style="display:flex; justify-content:center; gap:20px; margin-top:15px;">
-    <a href="https://www.instagram.com/grandbakeryjo" target="_blank">
-      <img src="Instagram.jpg" style="width:40px; border-radius:10px;" alt="Instagram">
-    </a>
-    <a href="https://maps.google.com/?q=Grand+Bakery" target="_blank">
-      <img src="googlemapsembed.jpg" style="width:40px; border-radius:10px;" alt="Google Maps">
-    </a>
+  <div style="display:flex; justify-content:center; gap:25px; margin-top:15px;">
+    <a href="https://www.instagram.com/grandbakeryjo" target="_blank"><img src="Instagram.jpg" style="width:45px; border-radius:12px;"></a>
+    <a href="https://maps.app.goo.gl/B9p6G9J9fC5F5t8A7" target="_blank"><img src="googlemapsembed.jpg" style="width:45px; border-radius:12px;"></a>
   </div>
 </div>
-
-
 
 <div id="lightbox" onclick="closeImg()"><img id="lightbox-img"></div>
 
@@ -281,22 +149,22 @@ video {
 
 <script>
 const uiText = {
-  ar: { pastries: "المعجنات", manakish: "المناقيش", healthy: "مناقيش صحية", contact: "تواصل معنا", install: "تثبيت الموقع على الشاشة الرئيسية" },
-  en: { pastries: "Pastries", manakish: "Manakish", healthy: "Healthy Options", contact: "Contact Us", install: "Install Website to Home Screen" }
+  ar: { pastries: "المعجنات", manakish: "المناقيش", healthy: "مناقيش صحية", pida: "بيدا", contact: "تواصل معنا", install: "تثبيت الموقع على الشاشة الرئيسية" },
+  en: { pastries: "Pastries", manakish: "Manakish", healthy: "Healthy Options", pida: "Pida Varieties", contact: "Contact Us", install: "Install Website to Home Screen" }
 };
 
 function toggleLang() {
-  const btn = document.querySelector(".lang-toggle");
   const isCurrentlyAr = document.documentElement.lang === "ar";
   const newLang = isCurrentlyAr ? "en" : "ar";
   
   document.documentElement.lang = newLang;
   document.body.style.direction = newLang === "ar" ? "rtl" : "ltr";
-  btn.innerText = newLang === "ar" ? "EN" : "AR";
+  document.querySelector(".lang-toggle").innerText = newLang === "ar" ? "EN" : "AR";
 
   document.querySelector(".t-pastries").innerText = uiText[newLang].pastries;
   document.querySelector(".t-manakish").innerText = uiText[newLang].manakish;
   document.querySelector(".t-healthy").innerText = uiText[newLang].healthy;
+  document.querySelector(".t-pida").innerText = uiText[newLang].pida;
   document.querySelector(".t-contact").innerText = uiText[newLang].contact;
   document.getElementById("install-text").innerText = uiText[newLang].install;
 
@@ -316,22 +184,8 @@ function openImg(e, img) { e.stopPropagation(); document.getElementById("lightbo
 function closeImg() { document.getElementById("lightbox").style.display = "none"; }
 
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('install-notif').style.display = 'flex';
-});
-
-async function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') closeNotif();
-    deferredPrompt = null;
-  } else {
-    alert("iPhone: Tap Share then 'Add to Home Screen'.\nAndroid: Tap browser menu then 'Install App'.");
-  }
-}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('install-notif').style.display = 'flex'; });
+async function installApp() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; } else { alert("Use Browser Menu -> Add to Home Screen"); } }
 function closeNotif() { document.getElementById('install-notif').style.display = 'none'; }
 </script>
 </body>
