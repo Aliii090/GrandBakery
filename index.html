@@ -202,8 +202,16 @@ video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit:
 
 <script>
 const uiText = {
-  ar: { pastries: "المعجنات", manakish: "المناقيش", healthy: "مناقيش صحية", pida: "بيدا", contact: "تواصل معنا", install: "تثبيت الموقع على الشاشة الرئيسية" },
-  en: { pastries: "Pastries", manakish: "Manakish", healthy: "Healthy Options", pida: "Pida Varieties", contact: "Contact Us", install: "Install Website to Home Screen" }
+  ar: { 
+    pastries: "المعجنات", manakish: "المناقيش", healthy: "مناقيش صحية", pida: "بيدا", 
+    bread: "المخبوزات", sweets: "حلويات غربية", pizza: "البيتزا",
+    contact: "تواصل معنا", install: "تثبيت الموقع" 
+  },
+  en: { 
+    pastries: "Pastries", manakish: "Manakish", healthy: "Healthy Options", pida: "Pida", 
+    bread: "Bakery & Bread", sweets: "Western Sweets", pizza: "Pizza",
+    contact: "Contact Us", install: "Install Website" 
+  }
 };
 
 function toggleLang() {
@@ -214,10 +222,16 @@ function toggleLang() {
   document.body.style.direction = newLang === "ar" ? "rtl" : "ltr";
   document.querySelector(".lang-toggle").innerText = newLang === "ar" ? "EN" : "AR";
 
+  // Category Translations
   document.querySelector(".t-pastries").innerText = uiText[newLang].pastries;
   document.querySelector(".t-manakish").innerText = uiText[newLang].manakish;
   document.querySelector(".t-healthy").innerText = uiText[newLang].healthy;
   document.querySelector(".t-pida").innerText = uiText[newLang].pida;
+  document.querySelector(".t-bread").innerText = uiText[newLang].bread;
+  document.querySelector(".t-sweets").innerText = uiText[newLang].sweets;
+  document.querySelector(".t-pizza").innerText = uiText[newLang].pizza;
+  
+  // Footer & Install
   document.querySelector(".t-contact").innerText = uiText[newLang].contact;
   document.getElementById("install-text").innerText = uiText[newLang].install;
 
@@ -225,6 +239,7 @@ function toggleLang() {
     el.innerText = el.getAttribute(`data-${newLang}`);
   });
 }
+
 
 function toggleSubmenu(id) {
   const target = document.getElementById(id);
