@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -334,23 +335,32 @@ let cart = {};
 function toggleLang() {
   const isCurrentlyAr = document.documentElement.lang === "ar";
   const newLang = isCurrentlyAr ? "en" : "ar";
+  
   document.documentElement.lang = newLang;
   document.body.style.direction = newLang === "ar" ? "rtl" : "ltr";
   document.querySelector(".lang-toggle").innerText = newLang === "ar" ? "EN" : "AR";
-  document.getElementById("cart-text").innerText = newLang === "ar" ? "إرسال الطلب عبر الواتساب" : "Send Order via WhatsApp";
-  document.querySelectorAll(".item-name").forEach(el => el.innerText = el.getAttribute(`data-${newLang}`));
+
+  // Updates the Category Headers
+  const categories = ["pastries", "manakish", "healthy", "pida", "bread", "sweets", "pizza"];
+  categories.forEach(cat => {
+    const el = document.querySelector(`.t-${cat}`);
+    if(el) el.innerText = uiText[newLang][cat];
+  });
+  
+  // Updates the Contact Us heading
+  const contactHeader = document.querySelector(".t-contact");
+  contactHeader.innerText = contactHeader.getAttribute(`data-${newLang}`);
+
+  // Updates all menu item names
+  document.querySelectorAll(".item-name").forEach(el => {
+    el.innerText = el.getAttribute(`data-${newLang}`);
+  });
+  
+  // Optional: Update Install text if you have it
+  const installText = document.getElementById("install-text");
+  if(installText) installText.innerText = uiText[newLang].install;
 }
 
-function changeQty(id, delta) {
-    if (!cart[id]) {
-        const row = document.querySelector(`[data-id="${id}"]`);
-        cart[id] = {
-            qty: 0,
-            price: parseFloat(row.querySelector(".price").innerText),
-            nameAr: row.querySelector(".item-name").getAttribute("data-ar"),
-            nameEn: row.querySelector(".item-name").getAttribute("data-en")
-        };
-    }
     cart[id].qty = Math.max(0, cart[id].qty + delta);
     document.getElementById(`q-${id}`).innerText = cart[id].qty;
     updateCartUI();
