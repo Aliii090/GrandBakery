@@ -280,7 +280,37 @@
         // --- App Utilities ---
         window.deleteRecord = async (coll, id) => { if(confirm("هل أنت متأكد من الحذف النهائي؟")) await deleteDoc(doc(db, coll, id)); };
         window.toggleAdmin = () => { const m = document.getElementById('admin-modal'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
-        window.loginAdmin = () => { if(document.getElementById('adminPass').value === '@admin5567') { document.getElementById('login-form').style.display = 'none'; document.getElementById('admin-content').style.display = 'block'; } };
+import { getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+window.loginAdmin = async () => {
+    const enteredPass = document.getElementById('adminPass').value;
+    const btn = document.querySelector('#login-form .btn-gold');
+    
+    btn.innerText = "Checking...";
+    
+    try {
+        // Fetch the password from the "settings" collection
+        const adminDoc = await getDoc(doc(db, "settings", "admin"));
+        
+        if (adminDoc.exists()) {
+            const correctPass = adminDoc.data().password;
+            
+            if (enteredPass === correctPass) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+            } else {
+                alert("Wrong password!");
+            }
+        } else {
+            alert("Error: Password not set in database.");
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Permission denied. Check your Firestore Rules!");
+    } finally {
+        btn.innerText = "Login";
+    }
+};
         window.toggleSub = (id) => { 
             const el = document.getElementById(`sub-${id}`); 
             const vis = el.style.display === 'block'; 
