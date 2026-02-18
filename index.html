@@ -129,21 +129,22 @@
     </div>
 <div id="choiceModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
     <div style="background:white; padding:30px; border-radius:15px; text-align:center; max-width:90%; width:400px;">
-        <h3 style="color:#d4af37; margin-bottom:20px;">How would you like your order?</h3>
+        <h3 style="color:#d4af37; margin-bottom:20px;">Order Method</h3>
         
-        <button onclick="finalizeOrder('Pickup 🛍️')" style="width:100%; padding:15px; margin-bottom:10px; background:#d4af37; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+        <a id="pickupBtn" onclick="prepareWhatsApp('Pickup 🛍️')" href="#" target="_blank" style="display:block; text-decoration:none; padding:15px; margin-bottom:10px; background:#d4af37; color:white; border-radius:8px; font-weight:bold;">
             I will Pick it up
-        </button>
+        </a>
         
-        <button onclick="finalizeOrder('Delivery 🚚')" style="width:100%; padding:15px; background:#333; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+        <a id="deliveryBtn" onclick="prepareWhatsApp('Delivery 🚚')" href="#" target="_blank" style="display:block; text-decoration:none; padding:15px; background:#333; color:white; border-radius:8px; font-weight:bold;">
             Deliver to me
-        </button>
+        </a>
         
         <button onclick="closeChoiceModal()" style="margin-top:15px; background:none; border:none; color:gray; text-decoration:underline; cursor:pointer;">
             Cancel
         </button>
     </div>
 </div>
+
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -348,39 +349,46 @@ window.loginAdmin = async () => {
         // Step 1: Open the choice modal instead of sending immediately
 window.sendOrder = () => {
     if (cart.length === 0) return alert("Your cart is empty!");
+    
+    // Pre-calculate the message content
+    const pickupLink = generateWALink('Pickup 🛍️');
+    const deliveryLink = generateWALink('Delivery 🚚');
+
+    // Attach the links directly to the <a> tags before showing the modal
+    document.getElementById('pickupBtn').href = pickupLink;
+    document.getElementById('deliveryBtn').href = deliveryLink;
+
     document.getElementById('choiceModal').style.display = 'flex';
+};
+
+function generateWALink(method) {
+    let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let msg = `*NEW ORDER - ${method}*\n`;
+    msg += `--------------------------\n`;
+    cart.forEach(item => {
+        msg += `• ${item.name} (x${item.quantity}) - ${item.price * item.quantity} JOD\n`;
+    });
+    msg += `--------------------------\n`;
+    msg += `*Total: ${total} JOD*`;
+
+    const phone = "962XXXXXXXXX"; // USE YOUR NUMBER HERE
+    return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+}
+
+// This runs when they click the choice to clear the cart
+window.prepareWhatsApp = (method) => {
+    setTimeout(() => {
+        closeChoiceModal();
+        cart = [];
+        updateCart();
+        if(typeof toggleCart === 'function') toggleCart(); 
+    }, 500); // Small delay to let the WhatsApp tab open first
 };
 
 window.closeChoiceModal = () => {
     document.getElementById('choiceModal').style.display = 'none';
 };
 
-// Step 2: Finalize and send to WhatsApp
-window.finalizeOrder = (method) => {
-    let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    // Header with the chosen method
-    let msg = `*NEW ORDER - ${method}*\n`;
-    msg += `--------------------------\n`;
-    
-    // Items list
-    cart.forEach(item => {
-        msg += `• ${item.name} (x${item.quantity}) - ${item.price * item.quantity} JOD\n`;
-    });
-    
-    msg += `--------------------------\n`;
-    msg += `*Total: ${total} JOD*`;
-
-    // Send to your WhatsApp number
-    const phone = "962XXXXXXXXX"; // Change to your bakery's number
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
-    
-    // Cleanup
-    closeChoiceModal();
-    cart = [];
-    updateCart();
-    toggleCart();
-};
 
     </script>
 </body>
