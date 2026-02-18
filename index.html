@@ -10,8 +10,19 @@
         :root { --gold: #D4AF37; --bg: #000; }
         body { margin: 0; font-family: 'Cormorant Garamond', serif; background: var(--bg); color: white; overflow-x: hidden; padding-bottom: 120px; }
         video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(8px) brightness(35%); z-index: -1; }
+        
         .top-bar { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 95%; max-width: 1200px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; z-index: 1000; border-radius: 0 0 20px 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.5); box-sizing: border-box; }
         .top-bar img { height: 50px; }
+        
+        /* PWA Notification */
+        #install-notif { 
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
+            background: var(--gold); color: black; padding: 18px; border-radius: 20px; 
+            display: none; flex-direction: column; gap: 12px; z-index: 2000; width: 290px; 
+            text-align: center; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #install-notif button { background: black; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; }
+
         .container { margin-top: 120px; display: flex; flex-direction: column; align-items: center; gap: 25px; }
         .top-menu-card { width: 320px; border-radius: 25px; overflow: hidden; cursor: pointer; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(212, 175, 55, 0.3); display: flex; flex-direction: column; align-items: center; padding: 12px; transition: 0.3s; }
         .top-menu-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 18px; }
@@ -23,16 +34,24 @@
         .qty-controls { display: flex; align-items: center; gap: 10px; }
         .qty-btn { background: rgba(212, 175, 55, 0.2); border: 1px solid var(--gold); color: white; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; }
         #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #25D366; color: white; padding: 18px; display: none; justify-content: space-around; align-items: center; z-index: 2001; font-weight: bold; cursor: pointer; }
+        
         .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; overflow-y: auto; box-sizing: border-box; }
         .admin-input { width: 100%; padding: 12px; margin: 8px 0; background: #1a1a1a; color: white; border: 1px solid #333; border-radius: 8px; }
         .btn-gold { background: var(--gold); color: black; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px;}
-        .del-btn { background: #ff4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .del-btn { background: #ff4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        
         #choiceModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; justify-content:center; align-items:center; }
         .choice-card { background: #111; padding: 30px; border-radius: 25px; border: 1px solid var(--gold); text-align: center; width: 90%; max-width: 400px; }
         .choice-btn { display:block; text-decoration:none; padding:15px; margin: 10px 0; border-radius:12px; font-weight:bold; font-size: 1.1rem; }
     </style>
 </head>
 <body>
+
+    <div id="install-notif">
+        <span>تثبيت الموقع على الشاشة الرئيسية</span>
+        <button onclick="installApp()">تثبيت الآن</button>
+        <button onclick="closeNotif()" style="background:none; color:black; font-size: 0.8rem;">إغلاق</button>
+    </div>
 
     <video autoplay muted loop playsinline><source src="grandvideo.mp4" type="video/mp4"></video>
 
@@ -101,8 +120,20 @@
         const IMGBB_KEY = '55027fd2838aa7439244264aa3a5e785';
 
         let cart = {};
+        let deferredPrompt;
 
-        // Sync Data
+        // --- PWA Logic ---
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e;
+            document.getElementById('install-notif').style.display = 'flex';
+        });
+        window.installApp = async () => {
+            if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
+            else { alert("استخدم قائمة المتصفح -> إضافة للشاشة الرئيسية"); }
+        };
+        window.closeNotif = () => document.getElementById('install-notif').style.display = 'none';
+
+        // --- Data Sync Engine ---
         onSnapshot(collection(db, "categories"), (snapshot) => {
             const container = document.getElementById('category-list');
             const select = document.getElementById('catSelect');
@@ -110,28 +141,26 @@
             
             container.innerHTML = ''; 
             select.innerHTML = ''; 
-            delCat.innerHTML = '<h4>الأقسام:</h4>';
+            delCat.innerHTML = '<h4>الأقسام الحالية:</h4>';
             
             snapshot.forEach(catDoc => {
                 const cat = catDoc.data();
                 container.innerHTML += `<div class="top-menu-card" onclick="toggleSub('${catDoc.id}')"><img src="${cat.img}"><h2>${cat.name}</h2></div><div id="sub-${catDoc.id}" class="submenu"></div>`;
                 select.innerHTML += `<option value="${catDoc.id}">${cat.name}</option>`;
-                delCat.innerHTML += `<div style="display:flex; justify-content:space-between; margin:5px 0;"><span>📁 ${cat.name}</span><button class="del-btn" onclick="deleteRecord('categories','${catDoc.id}')">حذف</button></div>`;
+                delCat.innerHTML += `<div style="display:flex; justify-content:space-between; margin:5px 0; background:#111; padding:5px; border-radius:5px;"><span>📁 ${cat.name}</span><button class="del-btn" onclick="deleteRecord('categories','${catDoc.id}')">حذف</button></div>`;
             });
 
             onSnapshot(collection(db, "menu"), (itemSnap) => {
                 const delItems = document.getElementById('admin-delete-items');
-                delItems.innerHTML = '<h4>الأصناف:</h4>';
+                delItems.innerHTML = '<h4>الأصناف الحالية:</h4>';
                 document.querySelectorAll('.submenu').forEach(s => s.innerHTML = '');
                 
                 itemSnap.forEach(itemDoc => {
                     const item = itemDoc.data();
-                    // Public
                     const sub = document.getElementById(`sub-${item.categoryId}`);
                     if(sub) {
                         sub.innerHTML += `<div class="menu-item"><img src="${item.img}" class="thumb"><div class="item-info"><div>${item.nameAr}</div><div style="color:var(--gold)">${item.price} JD</div></div><div class="qty-controls"><button class="qty-btn" onclick="changeQty('${itemDoc.id}', '${item.nameAr}', ${item.price}, -1)">-</button><span id="q-${itemDoc.id}">${cart[itemDoc.id]?.qty || 0}</span><button class="qty-btn" onclick="changeQty('${itemDoc.id}', '${item.nameAr}', ${item.price}, 1)">+</button></div></div>`;
                     }
-                    // Admin Delete
                     delItems.innerHTML += `<div style="display:flex; justify-content:space-between; margin:5px 0; border-bottom:1px solid #222; padding-bottom:5px;"><span>🥐 ${item.nameAr}</span><button class="del-btn" onclick="deleteRecord('menu','${itemDoc.id}')">حذف</button></div>`;
                 });
             });
@@ -139,13 +168,16 @@
 
         window.loginAdmin = async () => {
             const enteredPass = document.getElementById('adminPass').value;
+            const btn = document.querySelector('#login-form .btn-gold');
+            btn.innerText = "جاري التحقق...";
             try {
                 const adminDoc = await getDoc(doc(db, "settings", "admin"));
                 if (adminDoc.exists() && enteredPass === adminDoc.data().password) {
                     document.getElementById('login-form').style.display = 'none';
                     document.getElementById('admin-content').style.display = 'block';
-                } else { alert("كلمة المرور خاطئة"); }
+                } else { alert("كلمة المرور خاطئة!"); }
             } catch (e) { alert("خطأ في الاتصال"); }
+            btn.innerText = "دخول";
         };
 
         async function uploadToImgBB(file) {
@@ -159,10 +191,16 @@
         window.uploadCategory = async () => {
             const name = document.getElementById('catName').value;
             const file = document.getElementById('catFile').files[0];
+            const btn = document.getElementById('catBtn');
             if (!name || !file) return alert("اكمل البيانات");
-            const img = await uploadToImgBB(file);
-            await addDoc(collection(db, "categories"), { name, img });
-            alert("تم الحفظ");
+            btn.innerText = "جاري الرفع..."; btn.disabled = true;
+            try {
+                const img = await uploadToImgBB(file);
+                await addDoc(collection(db, "categories"), { name, img });
+                alert("تم الحفظ");
+                document.getElementById('catName').value = '';
+            } catch(e) { alert("Error uploading"); }
+            btn.innerText = "حفظ القسم"; btn.disabled = false;
         };
 
         window.uploadItem = async () => {
@@ -170,26 +208,34 @@
             const price = document.getElementById('price').value;
             const categoryId = document.getElementById('catSelect').value;
             const file = document.getElementById('itemFile').files[0];
+            const btn = document.getElementById('itemBtn');
             if(!nameAr || !price || !file) return alert("اكمل البيانات");
-            const img = await uploadToImgBB(file);
-            await addDoc(collection(db, "menu"), { nameAr, price: parseFloat(price), categoryId, img });
-            alert("تم الحفظ");
+            btn.innerText = "جاري الرفع..."; btn.disabled = true;
+            try {
+                const img = await uploadToImgBB(file);
+                await addDoc(collection(db, "menu"), { nameAr, price: parseFloat(price), categoryId, img });
+                alert("تم الحفظ");
+                document.getElementById('nameAr').value = ''; document.getElementById('price').value = '';
+            } catch(e) { alert("Error uploading"); }
+            btn.innerText = "حفظ الصنف"; btn.disabled = false;
         };
 
-        window.deleteRecord = async (coll, id) => { if(confirm("حذف نهائي؟")) await deleteDoc(doc(db, coll, id)); };
+        window.deleteRecord = async (coll, id) => { if(confirm("هل أنت متأكد من الحذف؟")) await deleteDoc(doc(db, coll, id)); };
         window.toggleAdmin = () => { const m = document.getElementById('admin-modal'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
         window.toggleSub = (id) => { 
             const el = document.getElementById(`sub-${id}`); 
             const vis = el.style.display === 'block'; 
             document.querySelectorAll('.submenu').forEach(s => s.style.display = 'none'); 
             el.style.display = vis ? 'none' : 'block'; 
+            if(!vis) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         };
 
         window.changeQty = (id, name, price, delta) => {
             if(!cart[id]) cart[id] = { name, price, qty: 0 };
             cart[id].qty = Math.max(0, cart[id].qty + delta);
             if(cart[id].qty === 0) delete cart[id];
-            document.getElementById(`q-${id}`).innerText = cart[id]?.qty || 0;
+            const qSpan = document.getElementById(`q-${id}`);
+            if(qSpan) qSpan.innerText = cart[id]?.qty || 0;
             let total = 0; for(let k in cart) total += (cart[k].price * cart[k].qty);
             document.getElementById('cart-bar').style.display = total > 0 ? 'flex' : 'none';
             document.getElementById('cart-total').innerText = total.toFixed(2) + " JD";
@@ -204,14 +250,14 @@
         };
 
         function createWALink(type) {
-            let msg = `*طلب جديد من Grand Bakery*\n*طريقة الاستلام: ${type}*\n----------\n`;
+            let msg = `*طلب جديد من Grand Bakery*%0A*طريقة الاستلام: ${type}*%0A----------%0A`;
             let total = 0;
             for(let k in cart) {
-                msg += `• ${cart[k].name} x${cart[k].qty}\n`;
+                msg += `• ${cart[k].name} x${cart[k].qty}%0A`;
                 total += (cart[k].price * cart[k].qty);
             }
-            msg += `----------\n*المجموع: ${total.toFixed(2)} JD*`;
-            return `https://wa.me/962792089999?text=${encodeURIComponent(msg)}`;
+            msg += `----------%0A*المجموع: ${total.toFixed(2)} JD*`;
+            return `https://wa.me/962792089999?text=${msg}`;
         }
 
         window.finalizeOrder = () => {
