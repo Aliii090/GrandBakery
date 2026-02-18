@@ -191,36 +191,62 @@
         }
 
         window.uploadCategory = async () => {
-            const pass = document.getElementById('adminPass').value;
-            const name = document.getElementById('catName').value;
-            const file = document.getElementById('catFile').files[0];
-            if (!name || !file) return alert("اكمل البيانات");
-            document.getElementById('catBtn').innerText = "جاري الرفع...";
-            try {
-                const img = await uploadToImgBB(file);
-                await addDoc(collection(db, "categories"), { name, img, secretPass: pass });
-                alert("تم الحفظ");
-                document.getElementById('catName').value = '';
-            } catch(e) { alert("فشل الحفظ: تأكد من كلمة المرور"); }
-            document.getElementById('catBtn').innerText = "حفظ القسم";
-        };
+        window.uploadCategory = async () => {
+    // 1. Get the password from the input box
+    const pass = document.getElementById('adminPass').value;
+    const name = document.getElementById('catName').value;
+    const file = document.getElementById('catFile').files[0];
 
-        window.uploadItem = async () => {
-            const pass = document.getElementById('adminPass').value;
-            const nameAr = document.getElementById('nameAr').value;
-            const price = document.getElementById('price').value;
-            const categoryId = document.getElementById('catSelect').value;
-            const file = document.getElementById('itemFile').files[0];
-            if(!nameAr || !price || !file) return alert("اكمل البيانات");
-            document.getElementById('itemBtn').innerText = "جاري الرفع...";
-            try {
-                const img = await uploadToImgBB(file);
-                await addDoc(collection(db, "menu"), { nameAr, price: parseFloat(price), categoryId, img, secretPass: pass });
-                alert("تم الحفظ");
-                document.getElementById('nameAr').value = ''; 
-            } catch(e) { alert("فشل الحفظ: تأكد من كلمة المرور"); }
-            document.getElementById('itemBtn').innerText = "حفظ الصنف";
-        };
+    if (!name || !file || !pass) return alert("Please fill all fields and enter your password!");
+
+    document.getElementById('catBtn').innerText = "Uploading...";
+    try {
+        const img = await uploadToImgBB(file);
+        // 2. We ADD 'secretPass' here so the Firebase Rules allow it
+        await addDoc(collection(db, "categories"), { 
+            name, 
+            img, 
+            secretPass: pass 
+        });
+        alert("Category Added!");
+        document.getElementById('catName').value = '';
+    } catch(e) { 
+        console.error(e);
+        alert("Upload Failed: Check password or connection."); 
+    }
+    document.getElementById('catBtn').innerText = "Save Category";
+};
+
+window.uploadItem = async () => {
+    // 1. Get the password from the input box
+    const pass = document.getElementById('adminPass').value;
+    const nameAr = document.getElementById('nameAr').value;
+    const price = document.getElementById('price').value;
+    const categoryId = document.getElementById('catSelect').value;
+    const file = document.getElementById('itemFile').files[0];
+
+    if(!nameAr || !price || !file || !pass) return alert("Please fill all fields and enter your password!");
+
+    document.getElementById('itemBtn').innerText = "Uploading...";
+    try {
+        const img = await uploadToImgBB(file);
+        // 2. We ADD 'secretPass' here so the Firebase Rules allow it
+        await addDoc(collection(db, "menu"), { 
+            nameAr, 
+            price: parseFloat(price), 
+            categoryId, 
+            img, 
+            secretPass: pass 
+        });
+        alert("Item Added!");
+        document.getElementById('nameAr').value = ''; 
+    } catch(e) { 
+        console.error(e);
+        alert("Upload Failed: Check password or connection."); 
+    }
+    document.getElementById('itemBtn').innerText = "Save Item";
+};
+
 
         window.deleteRecord = async (coll, id) => {
     // 1. Grab the password from your existing input field
