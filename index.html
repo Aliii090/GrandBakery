@@ -226,192 +226,62 @@
         };
 
         window.uploadItem = async () => {
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = { 
-        apiKey: "AIzaSyDVo1AFcUl9fLKYU97CcCoRdkCQEEQAPow", 
-        authDomain: "grandbake-5689d.firebaseapp.com", 
-        projectId: "grandbake-5689d", 
-        storageBucket: "grandbake-5689d.firebasestorage.app", 
-        messagingSenderId: "199046288157", 
-        appId: "1:199046288157:web:5d0eca8fa42e2b9f8707f4" 
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const IMGBB_KEY = '55027fd2838aa7439244264aa3a5e785';
-
-    let cart = {};
-    let customerName = "";
-    let deferredPrompt;
-
-    // --- AUTH LOGIC ---
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('admin-content').style.display = 'block';
-            loadAdminTools();
-        } else {
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('admin-content').style.display = 'none';
-        }
-    });
-
-    window.loginAdmin = async () => {
-        const e = document.getElementById('adminEmail').value.trim(); // Removed spaces
-        const p = document.getElementById('adminPass').value;
-        if(!e || !p) return alert("الرجاء إدخال البريد وكلمة المرور");
-        
-        try { 
-            await signInWithEmailAndPassword(auth, e, p); 
-        } catch(err) { 
-            console.error(err);
-            alert("خطأ: تأكد من البريد وكلمة المرور"); 
-        }
-    };
-
-    window.logoutAdmin = () => signOut(auth);
-
-    // --- PWA LOGIC ---
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault(); deferredPrompt = e;
-        document.getElementById('install-notif').style.display = 'flex';
-    });
-    window.installApp = async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') document.getElementById('install-notif').style.display = 'none';
-        }
-    };
-    window.closeNotif = () => document.getElementById('install-notif').style.display = 'none';
-
-    // --- DATA SYNC ---
-    onSnapshot(collection(db, "categories"), (snapshot) => {
-        const container = document.getElementById('category-list');
-        const select = document.getElementById('catSelect');
-        container.innerHTML = ''; select.innerHTML = '';
-        snapshot.forEach(catDoc => {
-            const cat = catDoc.data();
-            container.innerHTML += `<div class="top-menu-card" onclick="toggleSub('${catDoc.id}')"><img src="${cat.img}"><h2>${cat.name}</h2></div><div id="sub-${catDoc.id}" class="submenu"></div>`;
-            select.innerHTML += `<option value="${catDoc.id}">${cat.name}</option>`;
-        });
-        
-        onSnapshot(collection(db, "menu"), (itemSnap) => {
-            document.querySelectorAll('.submenu').forEach(s => s.innerHTML = '');
-            itemSnap.forEach(itemDoc => {
-                const item = itemDoc.data();
-                const sub = document.getElementById(`sub-${item.categoryId}`);
-                if(sub) {
-                    sub.innerHTML += `<div class="menu-item"><img src="${item.img}" class="thumb"><div>${item.nameAr}<br><span style="color:var(--gold)">${item.price} JD</span></div><div class="qty-controls"><button class="qty-btn" onclick="changeQty('${itemDoc.id}', '${item.nameAr}', ${item.price}, -1)">-</button><span id="q-${itemDoc.id}">${cart[itemDoc.id]?.qty || 0}</span><button class="qty-btn" onclick="changeQty('${itemDoc.id}', '${item.nameAr}', ${item.price}, 1)">+</button></div></div>`;
-                }
-            });
-        });
-    });
-
-    // --- ADMIN ACTIONS ---
-    async function uploadToImgBB(file) {
-        const formData = new FormData(); formData.append('image', file);
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: 'POST', body: formData });
-        const data = await res.json(); return data.data.url;
-    }
-
-    window.uploadCategory = async () => {
-        const name = document.getElementById('catName').value;
-        const file = document.getElementById('catFile').files[0];
-        if(!name || !file) return alert("اكمل بيانات القسم");
-        const btn = document.getElementById('catBtn');
-        btn.innerText = "جاري الحفظ..."; btn.disabled = true;
-        try {
-            const img = await uploadToImgBB(file);
-            await addDoc(collection(db, "categories"), { name, img });
-            alert("تم حفظ القسم");
-        } catch(e) { alert("خطأ في الرفع"); }
-        btn.innerText = "حفظ القسم"; btn.disabled = false;
-    };
-
-    window.uploadItem = async () => {
-        const nameAr = document.getElementById('itemNameAr').value;
-        const price = document.getElementById('itemPrice').value;
-        const catId = document.getElementById('catSelect').value;
-        const file = document.getElementById('itemFile').files[0];
-        if(!nameAr || !price || !file) return alert("اكمل البيانات");
-        const btn = document.getElementById('itemBtn');
-        btn.innerText = "جاري الحفظ..."; btn.disabled = true;
-        try {
+            const nameAr = document.getElementById('itemNameAr').value;
+            const price = document.getElementById('itemPrice').value;
+            const catId = document.getElementById('catSelect').value;
+            const file = document.getElementById('itemFile').files[0];
+            if(!nameAr || !price || !file) return alert("اكمل البيانات");
             const img = await uploadToImgBB(file);
             await addDoc(collection(db, "menu"), { nameAr, price: parseFloat(price), categoryId: catId, img });
             alert("تم حفظ الصنف");
-        } catch(e) { alert("خطأ في الرفع"); }
-        btn.innerText = "حفظ الصنف"; btn.disabled = false;
-    };
+        };
 
-    function loadAdminTools() {
-        onSnapshot(collection(db, "menu"), (snap) => {
-            const list = document.getElementById('admin-delete-list');
-            list.innerHTML = '';
-            snap.forEach(d => {
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin:8px 0; background:#111; padding:10px; border-radius:10px;"><span>${d.data().nameAr}</span><button class="del-btn" onclick="delItem('${d.id}')">حذف</button></div>`;
+        function loadAdminTools() {
+            onSnapshot(collection(db, "menu"), (snap) => {
+                const list = document.getElementById('admin-delete-list');
+                list.innerHTML = '';
+                snap.forEach(d => {
+                    list.innerHTML += `<div style="display:flex; justify-content:space-between; margin:8px 0; background:#111; padding:10px; border-radius:10px;"><span>${d.data().nameAr}</span><button class="del-btn" onclick="delItem('${d.id}')">حذف</button></div>`;
+                });
             });
-        });
-    }
-
-    window.delItem = async (id) => { if(confirm("حذف نهائي؟")) await deleteDoc(doc(db, "menu", id)); };
-
-    // --- UI & ORDERING ---
-    window.changeQty = (id, name, price, delta) => {
-        if(!cart[id]) cart[id] = { name, price, qty: 0 };
-        cart[id].qty = Math.max(0, cart[id].qty + delta);
-        if(cart[id].qty === 0) delete cart[id];
-        document.getElementById(`q-${id}`).innerText = cart[id]?.qty || 0;
-        let total = 0; for(let k in cart) total += (cart[k].price * cart[k].qty);
-        document.getElementById('cart-bar').style.display = total > 0 ? 'flex' : 'none';
-        document.getElementById('cart-total').innerText = total.toFixed(2) + " JD";
-    };
-
-    window.toggleAdminModal = () => { 
-        const m = document.getElementById('admin-modal'); 
-        m.style.display = (m.style.display === 'block') ? 'none' : 'block'; 
-    };
-
-    window.toggleSub = (id) => { 
-        const el = document.getElementById(`sub-${id}`); 
-        const isVisible = el.style.display === 'block'; 
-        document.querySelectorAll('.submenu').forEach(s => s.style.display = 'none'); 
-        el.style.display = isVisible ? 'none' : 'block'; 
-    };
-
-    window.showNameModal = () => document.getElementById('nameModal').style.display = 'flex';
-    window.closeModals = () => { 
-        document.getElementById('nameModal').style.display = 'none'; 
-        document.getElementById('choiceModal').style.display = 'none'; 
-    };
-
-    window.proceedToDelivery = () => {
-        customerName = document.getElementById('custName').value.trim();
-        if(!customerName) return alert("الرجاء إدخال الاسم");
-        document.getElementById('nameModal').style.display = 'none';
-        document.getElementById('pickupBtn').href = createWA('استلام 🛍️');
-        document.getElementById('deliveryBtn').href = createWA('توصيل 🚚');
-        document.getElementById('choiceModal').style.display = 'flex';
-    };
-
-    function createWA(type) {
-        let msg = `*طلب جديد من Grand Bakery*%0Aالاسم: ${customerName}%0Aالاستلام: ${type}%0A----------%0A`;
-        let total = 0; for(let k in cart) { 
-            msg += `• ${cart[k].name} x${cart[k].qty}%0A`; 
-            total += (cart[k].price * cart[k].qty); 
         }
-        msg += `----------%0A*المجموع: ${total.toFixed(2)} JD*`;
-        return `https://wa.me/962792089999?text=${msg}`;
-    }
 
-    window.finalizeOrder = () => { setTimeout(() => location.reload(), 1000); };
-</script>
+        window.delItem = async (id) => { if(confirm("حذف نهائي؟")) await deleteDoc(doc(db, "menu", id)); };
 
+        // Cart Logic
+        window.changeQty = (id, name, price, delta) => {
+            if(!cart[id]) cart[id] = { name, price, qty: 0 };
+            cart[id].qty = Math.max(0, cart[id].qty + delta);
+            if(cart[id].qty === 0) delete cart[id];
+            document.getElementById(`q-${id}`).innerText = cart[id]?.qty || 0;
+            let total = 0; for(let k in cart) total += (cart[k].price * cart[k].qty);
+            document.getElementById('cart-bar').style.display = total > 0 ? 'flex' : 'none';
+            document.getElementById('cart-total').innerText = total.toFixed(2) + " JD";
+        };
+
+        window.toggleAdminModal = () => { const m = document.getElementById('admin-modal'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
+        window.toggleSub = (id) => { const el = document.getElementById(`sub-${id}`); const vis = el.style.display === 'block'; document.querySelectorAll('.submenu').forEach(s => s.style.display = 'none'); el.style.display = vis ? 'none' : 'block'; };
+        
+        // Order Logic
+        window.showNameModal = () => document.getElementById('nameModal').style.display = 'flex';
+        window.closeModals = () => { document.getElementById('nameModal').style.display = 'none'; document.getElementById('choiceModal').style.display = 'none'; };
+        window.proceedToDelivery = () => {
+            customerName = document.getElementById('custName').value.trim();
+            if(!customerName) return alert("الرجاء إدخال الاسم");
+            document.getElementById('nameModal').style.display = 'none';
+            document.getElementById('pickupBtn').href = createWA('استلام 🛍️');
+            document.getElementById('deliveryBtn').href = createWA('توصيل 🚚');
+            document.getElementById('choiceModal').style.display = 'flex';
+        };
+
+        function createWA(type) {
+            let msg = `*طلب جديد من Grand Bakery*%0Aالاسم: ${customerName}%0Aالاستلام: ${type}%0A----------%0A`;
+            let total = 0; for(let k in cart) { msg += `• ${cart[k].name} x${cart[k].qty}%0A`; total += (cart[k].price * cart[k].qty); }
+            msg += `----------%0A*المجموع: ${total.toFixed(2)} JD*`;
+            return `https://wa.me/962792089999?text=${msg}`;
+        }
+
+        window.finalizeOrder = () => { setTimeout(() => location.reload(), 1000); };
+    </script>
 </body>
 </html>
