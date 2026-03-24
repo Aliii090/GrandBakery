@@ -286,24 +286,23 @@
         };
 
         window.sendOrder = () => {
-            const name = prompt("الرجاء إدخال اسمك الكريم:");
-            if (!name) return;
-            document.getElementById('pickupBtn').href = createWALink('استلام 🛍️', name);
-            document.getElementById('deliveryBtn').href = createWALink('توصيل 🚚', name);
-            document.getElementById('choiceModal').style.display = 'flex';
-        };
+    const name = prompt("الرجاء إدخال اسمك الكريم:");
+    if (!name) return;
 
-        function createWALink(type, customerName) {
-            let msg = `*طلب جديد من Grand Bakery*\n`;
-            msg += `*الاسم: ${customerName}*\n`;
-            msg += `*النوع: ${type}*\n`;
-            msg += `--------------------------\n`;
-            let total = 0;
-            for(let k in cart) { msg += `• ${cart[k].name} x${cart[k].qty}\n`; total += (cart[k].price * cart[k].qty); }
-            msg += `--------------------------\n`;
-            msg += `*المجموع: ${total.toFixed(2)} JD*`;
-            return `https://wa.me/962792089999?text=${encodeURIComponent(msg)}`;
-        }
+    document.getElementById('pickupBtn').onclick = () => {
+        const url = createWALink('استلام 🛍️', name);
+        window.location.href = url;
+        resetCartAfterSend();
+    };
+
+    document.getElementById('deliveryBtn').onclick = () => {
+        const url = createWALink('توصيل 🚚', name);
+        window.location.href = url;
+        resetCartAfterSend();
+    };
+
+    document.getElementById('choiceModal').style.display = 'flex';
+};
 
         window.finalizeOrder = () => {
             setTimeout(() => { closeChoiceModal(); cart = {}; document.getElementById('cart-bar').style.display = 'none'; document.querySelectorAll('.qty-controls span').forEach(s => s.innerText = '0'); }, 1000);
